@@ -49,13 +49,16 @@ Developed a full-stack Social Media Platform using Express.js, MongoDB, HTML, CS
    npm start
    ```
 5. **Visit:** `http://localhost:3000`
-6. ## CodeAlpha Tasks
+# CodeAlpha Tasks
 
-### Task 1 - Social Media Platform
+## Task 1: Social Media Platform
+GitHub Repo:
 https://github.com/dharaniramalingam8-prog/social-media-platform
 
-### Task 2 - Management Tool
-(Paste your Management Tool GitHub repo link here)
+## Task 2: Management Tool
+GitHub Repo:
+https://github.com/dharaniramalingam8-prog/management-tool
 
-### Task 3 - Ecommerce Project
-(Paste your Ecommerce Project GitHub repo link here)
+## Task 3: Ecommerce Project
+GitHub Repo:
+https://github.com/dharaniramalingam8-prog/ecommerce_project
