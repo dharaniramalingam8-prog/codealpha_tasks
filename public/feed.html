@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Feed — Vibe</title>
+  <meta name="description" content="Your Vibe home feed — posts from people you follow." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <!-- Socket.IO client -->
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <span class="navbar-brand" onclick="window.location.href='/feed.html'">✦ Vibe</span>
+    <div class="navbar-actions">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input id="search-input" type="text" class="search-input" placeholder="Search people..." autocomplete="off" />
+        <div class="search-results" id="search-results"></div>
+      </div>
+
+      <!-- Notification Bell -->
+      <div class="notif-wrapper">
+        <button class="notif-btn" id="notif-btn" onclick="toggleNotifDropdown()" title="Notifications" aria-label="Notifications">
+          🔔
+          <span class="notif-badge" id="notif-badge" style="display:none">0</span>
+        </button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header">
+            <h3>Notifications</h3>
+            <button class="notif-mark-all" onclick="markAllRead()">Mark all read</button>
+          </div>
+          <div id="notif-list"></div>
+        </div>
+      </div>
+
+      <!-- DM Button -->
+      <a href="/messages.html" class="dm-btn" title="Direct Messages" id="dm-btn">
+        💬
+        <span class="notif-badge" id="dm-badge" style="display:none">0</span>
+      </a>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="handleThemeToggle()" title="Toggle theme">☀️</button>
+
+      <div id="nav-avatar"></div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Layout -->
+  <div class="page-layout">
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="card widget-card">
+        <div style="text-align:center;padding:4px 0 16px">
+          <div id="self-avatar" style="display:flex;justify-content:center;margin-bottom:12px"></div>
+          <div id="self-username" style="font-weight:700;font-size:1rem;margin-bottom:4px">Loading...</div>
+          <div id="self-bio" style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px"></div>
+          <div style="display:flex;justify-content:center;gap:16px">
+            <div class="stat-item" id="self-posts-stat">
+              <div class="stat-value" id="self-posts">—</div>
+              <div class="stat-label">Posts</div>
+            </div>
+            <div class="stat-item" id="self-followers-stat">
+              <div class="stat-value" id="self-followers">—</div>
+              <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-item" id="self-following-stat">
+              <div class="stat-value" id="self-following">—</div>
+              <div class="stat-label">Following</div>
+            </div>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--glass-border);margin:0 -18px 14px" />
+        <a id="view-profile-link" href="#" class="btn btn-secondary btn-sm btn-block">View Profile</a>
+      </div>
+
+      <div class="card widget-card">
+        <p class="widget-title">Browse</p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-primary btn-sm btn-block" id="btn-feed" onclick="setTab('feed')">🏠 Following Feed</button>
+          <button class="btn btn-secondary btn-sm btn-block" id="btn-explore" onclick="setTab('explore')">🌍 Explore All</button>
+        </div>
+      </div>
+      <div class="card" style="padding: 16px; margin-bottom: 24px;">
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px">
+          <li><a href="/reels.html" style="text-decoration:none;color:var(--text-color);display:flex;align-items:center;gap:10px;font-weight:500"><span style="font-size:1.2rem">🎬</span> Reels</a></li>
+          <li><a href="/bookmarks.html" style="text-decoration:none;color:var(--text-color);display:flex;align-items:center;gap:10px;font-weight:500"><span style="font-size:1.2rem">🔖</span> Saved Posts</a></li>
+          <li><a href="/search.html" style="text-decoration:none;color:var(--text-color);display:flex;align-items:center;gap:10px;font-weight:500"><span style="font-size:1.2rem">🔍</span> Search</a></li>
+        </ul>
+      </div>
+      <!-- User Profile Summary Placeholder -->
+      <div id="sidebar-profile"></div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+      <!-- ── Stories Tray ── -->
+      <div class="stories-tray" id="stories-tray">
+        <div class="story-item" onclick="document.getElementById('story-upload-input').click()">
+          <div class="story-add-btn">+</div>
+          <div class="story-username">Add Story</div>
+        </div>
+        <input type="file" id="story-upload-input" accept="image/*" style="display:none" />
+      </div>
+
+      <!-- New Post Box -->
+      <div class="card create-post-card">
+        <div class="create-post-row">
+          <div id="create-post-avatar"></div>
+          <div class="create-post-inputs">
+            <textarea id="post-textarea" class="create-post-textarea"
+              placeholder="What's on your mind? Use #hashtags!" maxlength="500"
+              rows="3" oninput="updateCharCounter()"></textarea>
+
+            <!-- Image Upload -->
+            <div class="image-upload-area" id="upload-area" onclick="triggerFileInput()">
+              <input type="file" id="post-image-file" accept="image/*" onchange="handleImageSelect(event)" style="display:none" />
+              <div class="upload-placeholder" id="upload-placeholder">
+                <span>📷</span>
+                <span>Click to add an image</span>
+              </div>
+              <div class="image-preview-container" id="image-preview-container" style="display:none">
+                <img id="image-preview" class="image-preview" alt="Preview" />
+                <button class="image-preview-remove" onclick="removeImage(event)" title="Remove image">✕</button>
+              </div>
+            </div>
+
+            <div class="create-post-footer">
+              <span class="char-counter" id="char-counter">0 / 500</span>
+              <div style="display:flex; gap:10px;">
+                <button class="btn btn-secondary btn-sm" id="toggle-poll-btn" onclick="togglePollInputs()">📊 Poll</button>
+                <button class="btn btn-primary btn-sm" id="post-btn" onclick="createPost()">Post ✨</button>
+              </div>
+            </div>
+            
+            <!-- Poll Inputs (Hidden by default) -->
+            <div id="poll-inputs-container" style="display:none; margin-top: 15px; background: var(--bg-hover); padding: 15px; border-radius: 8px;">
+              <input type="text" id="poll-question" class="input" placeholder="Ask a question..." style="margin-bottom: 10px; width: 100%;">
+              <div id="poll-options-list" style="display:flex; flex-direction:column; gap:8px;">
+                <input type="text" class="input poll-option-input" placeholder="Option 1" style="width: 100%;">
+                <input type="text" class="input poll-option-input" placeholder="Option 2" style="width: 100%;">
+              </div>
+              <button class="btn btn-secondary btn-sm" style="margin-top: 10px;" onclick="addPollOption()">+ Add Option</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts -->
+      <div id="posts-container"></div>
+
+      <div style="text-align:center;padding:16px 0">
+        <button class="btn btn-secondary" id="load-more-btn" onclick="loadMorePosts()" style="display:none">Load More</button>
+        <div id="all-loaded" style="display:none;color:var(--text-muted);font-size:.875rem">You've seen it all ✨</div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="sidebar">
+      <div class="card widget-card">
+        <p class="widget-title">Who to Follow</p>
+        <div id="suggestions-list">
+          <div class="skeleton" style="height:44px;margin-bottom:8px;border-radius:8px"></div>
+          <div class="skeleton" style="height:44px;margin-bottom:8px;border-radius:8px"></div>
+          <div class="skeleton" style="height:44px;border-radius:8px"></div>
+        </div>
+      </div>
+
+      <!-- Trending Hashtags -->
+      <div class="card widget-card">
+        <p class="widget-title">🔥 Trending</p>
+        <div id="trending-list" class="trending-list">
+          <div class="skeleton" style="height:32px;margin-bottom:6px;border-radius:8px"></div>
+          <div class="skeleton" style="height:32px;margin-bottom:6px;border-radius:8px"></div>
+          <div class="skeleton" style="height:32px;border-radius:8px"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Edit Post Modal -->
+  <div class="modal-overlay" id="edit-modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Post</h2>
+        <button class="modal-close" onclick="closeEditModal()">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="input-group">
+          <label for="edit-content">Content</label>
+          <textarea id="edit-content" class="edit-textarea" maxlength="500" placeholder="What's on your mind?"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+          <button class="btn btn-primary" id="edit-save-btn" onclick="submitEdit()">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Followers/Following Modal -->
+  <div class="modal-overlay" id="follow-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="follow-modal-title">Followers</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="follow-modal-list" style="max-height:360px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <!-- Full Screen Edit Modal -->
+  <div class="modal-overlay" id="edit-modal">
+    <!-- ... -->
+  </div>
+
+  <!-- Story Viewer Modal -->
+  <div class="story-viewer-overlay" id="story-viewer" style="display:none">
+    <div class="story-viewer-content">
+      <div class="story-progress-bar" id="story-progress-bar"></div>
+      <button class="story-close" onclick="closeStoryViewer()">×</button>
+      <div class="story-author-info">
+        <div id="story-author-avatar"></div>
+        <div style="font-weight:600" id="story-author-name"></div>
+      </div>
+      <div class="story-nav story-nav-left" onclick="prevStory()"></div>
+      <div class="story-nav story-nav-right" onclick="nextStory()"></div>
+      <img src="" id="story-image" class="story-image" />
+    </div>
+  </div>
+
+  <script type="module" src="/js/feed.js"></script>
+</body>
+</html>

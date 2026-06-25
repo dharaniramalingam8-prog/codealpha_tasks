@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Vibe</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="navbar-brand" onclick="window.location.href='/feed.html'">✦ Vibe</span>
+    <div class="navbar-actions">
+      <div class="notif-wrapper">
+        <button class="notif-btn" onclick="toggleNotifDropdown()">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span></button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header"><h3>Notifications</h3></div>
+          <div id="notif-list"></div>
+        </div>
+      </div>
+      <a href="/messages.html" class="dm-btn">💬</a>
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="handleThemeToggle()">☀️</button>
+      <div id="nav-avatar"></div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="page-layout" style="grid-template-columns:1fr;max-width:600px">
+    <main class="main-content">
+      <div style="margin-bottom:16px">
+        <button class="btn btn-secondary btn-sm" onclick="history.back()">← Back</button>
+      </div>
+
+      <div class="card" style="padding:24px">
+        <h2 style="margin-bottom:24px">Account Settings</h2>
+
+        <div class="input-group" style="margin-bottom:16px">
+          <label>Email Address</label>
+          <input type="email" id="set-email" class="input" placeholder="your@email.com" />
+        </div>
+
+        <div class="input-group" style="margin-bottom:16px">
+          <label>New Password (leave blank to keep current)</label>
+          <input type="password" id="set-password" class="input" placeholder="New password" />
+        </div>
+
+        <div class="input-group" style="margin-bottom:24px;flex-direction:row;align-items:center;gap:12px">
+          <input type="checkbox" id="set-private" style="width:18px;height:18px;cursor:pointer" />
+          <label for="set-private" style="cursor:pointer;margin:0;font-size:.9rem;text-transform:none">Private Account</label>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="save-settings-btn" onclick="saveSettings()">Save Settings</button>
+      </div>
+
+      <!-- Moderation Controls -->
+      <div class="card" style="padding:24px;margin-top:24px">
+        <h2 style="margin-bottom:16px;color:var(--danger)">Danger Zone</h2>
+        <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:16px">Once you delete your account, there is no going back. Please be certain.</p>
+        <button class="btn btn-danger btn-block" onclick="deleteAccount()">Delete Account</button>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module" src="/js/settings.js"></script>
+</body>
+</html>

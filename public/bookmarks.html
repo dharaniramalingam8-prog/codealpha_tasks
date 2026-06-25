@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Posts — Vibe</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="navbar-brand" onclick="window.location.href='/feed.html'">✦ Vibe</span>
+    <div class="navbar-actions">
+      <div class="notif-wrapper">
+        <button class="notif-btn" onclick="toggleNotifDropdown()">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span></button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header"><h3>Notifications</h3></div>
+          <div id="notif-list"></div>
+        </div>
+      </div>
+      <a href="/messages.html" class="dm-btn">💬</a>
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="handleThemeToggle()">☀️</button>
+      <div id="nav-avatar"></div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="page-layout" style="grid-template-columns:1fr;max-width:600px">
+    <main class="main-content">
+      <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <button class="btn btn-secondary btn-sm" onclick="history.back()">← Back</button>
+        <h2 style="margin:0">Saved Posts 🔖</h2>
+      </div>
+
+      <div id="bookmarks-container">
+        <div style="text-align:center;padding:40px"><span class="spinner"></span></div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/js/bookmarks.js"></script>
+</body>
+</html>

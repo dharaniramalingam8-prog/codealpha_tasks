@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe — Connect & Share</title>
+  <meta name="description" content="Join Vibe — share your thoughts, follow friends, and explore what's happening." />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script>
+    // Apply theme before render to prevent flash
+    (function() {
+      const t = localStorage.getItem('vibe_theme') || 'dark';
+      if (t === 'light') document.documentElement.classList.add('light-theme-early');
+    })();
+  </script>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <h1>✦ Vibe</h1>
+        <p>Connect with people who matter to you.</p>
+      </div>
+
+      <div class="card auth-card">
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
+          <div class="auth-tab" id="tab-register" onclick="switchTab('register')">Create Account</div>
+        </div>
+
+        <div class="auth-error" id="auth-error"></div>
+
+        <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <label for="login-email">Email</label>
+            <input id="login-email" class="input" type="email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <input id="login-password" class="input" type="password" placeholder="••••••••" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" id="login-btn" data-label="Sign In">Sign In</button>
+        </form>
+
+        <form class="auth-form" id="register-form" style="display:none" onsubmit="handleRegister(event)">
+          <div class="input-group">
+            <label for="reg-username">Username</label>
+            <input id="reg-username" class="input" type="text" placeholder="cooluser123"
+              required minlength="3" maxlength="30" autocomplete="username"
+              pattern="[a-zA-Z0-9_]+" title="Letters, numbers, and underscores only" />
+          </div>
+          <div class="input-group">
+            <label for="reg-email">Email</label>
+            <input id="reg-email" class="input" type="email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="input-group">
+            <label for="reg-password">Password</label>
+            <input id="reg-password" class="input" type="password" placeholder="At least 6 characters"
+              required minlength="6" autocomplete="new-password" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" id="register-btn" data-label="Create Account">Create Account</button>
+        </form>
+      </div>
+
+      <p style="text-align:center;margin-top:20px;font-size:.82rem;color:var(--text-muted)">
+        By signing up, you agree to our Terms &amp; Privacy Policy.
+      </p>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-overlay" id="forgot-modal" style="display:none">
+    <div class="modal-content" style="max-width:400px;text-align:center">
+      <h2>Reset Password</h2>
+      <p style="margin-bottom:20px;color:var(--text-muted)">Enter your email to receive a reset link.</p>
+      <form id="forgot-form" onsubmit="handleForgot(event)">
+        <div class="input-group">
+          <input type="email" class="input" id="forgot-email" placeholder="Email Address" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Send Reset Link</button>
+        <button type="button" class="btn btn-secondary btn-block" onclick="closeForgotModal()" style="margin-top:10px">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/js/auth.js"></script>
+</body>
+</html>

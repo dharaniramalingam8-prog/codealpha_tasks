@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search — Vibe</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="navbar-brand" onclick="window.location.href='/feed.html'">✦ Vibe</span>
+    <div class="search-wrapper">
+      <input type="text" id="global-search-input" class="search-input" placeholder="Search..." autocomplete="off"/>
+    </div>
+    <div class="navbar-actions">
+      <div class="notif-wrapper">
+        <button class="notif-btn" onclick="toggleNotifDropdown()">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span></button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header"><h3>Notifications</h3></div>
+          <div id="notif-list"></div>
+        </div>
+      </div>
+      <a href="/messages.html" class="dm-btn">💬</a>
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="handleThemeToggle()">☀️</button>
+      <div id="nav-avatar"></div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="page-layout" style="grid-template-columns:250px 1fr;max-width:1000px">
+    
+    <aside class="sidebar">
+      <div class="card" style="padding:16px">
+        <h3 style="margin-bottom:12px">Filters</h3>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px">
+          <li><button class="btn btn-secondary btn-block" id="tab-all" onclick="setSearchFilter('all')">All Results</button></li>
+          <li><button class="btn btn-secondary btn-block" id="tab-users" onclick="setSearchFilter('users')">Users</button></li>
+          <li><button class="btn btn-secondary btn-block" id="tab-posts" onclick="setSearchFilter('posts')">Posts</button></li>
+          <li><button class="btn btn-secondary btn-block" id="tab-hashtags" onclick="setSearchFilter('hashtags')">Hashtags</button></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h2 style="margin-bottom:16px">Search Results for <span id="search-query-display" style="color:var(--accent)"></span></h2>
+      
+      <div id="search-results-container">
+        <div style="text-align:center;padding:40px"><span class="spinner"></span></div>
+      </div>
+    </main>
+
+  </div>
+
+  <script type="module" src="/js/search.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Vibe</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="navbar-brand" onclick="window.location.href='/feed.html'">✦ Vibe Admin</span>
+    <div class="navbar-actions">
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="handleThemeToggle()">☀️</button>
+      <div id="nav-avatar"></div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="page-layout" style="grid-template-columns:1fr;max-width:900px">
+    <main class="main-content">
+      <div style="margin-bottom:16px">
+        <button class="btn btn-secondary btn-sm" onclick="history.back()">← Back</button>
+      </div>
+
+      <h2 style="margin-bottom:24px">Admin Analytics Dashboard</h2>
+
+      <!-- Stats Grid -->
+      <div class="profile-stats-grid" style="grid-template-columns: repeat(4, 1fr);gap:16px;margin-bottom:32px">
+        <div class="card stat-item" style="padding:20px 14px">
+          <div class="stat-value" id="stat-users">0</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="card stat-item" style="padding:20px 14px">
+          <div class="stat-value" id="stat-posts">0</div>
+          <div class="stat-label">Total Posts</div>
+        </div>
+        <div class="card stat-item" style="padding:20px 14px">
+          <div class="stat-value" id="stat-comments">0</div>
+          <div class="stat-label">Total Comments</div>
+        </div>
+        <div class="card stat-item" style="padding:20px 14px">
+          <div class="stat-value" id="stat-reports">0</div>
+          <div class="stat-label">Pending Reports</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:24px">
+        <h3 style="margin-bottom:16px">Moderation Reports</h3>
+        <div id="reports-list">
+          <div style="text-align:center;padding:24px"><span class="spinner"></span></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

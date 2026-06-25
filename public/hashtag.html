@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hashtag — Vibe</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <span class="navbar-brand" onclick="window.location.href='/feed.html'">✦ Vibe</span>
+    <div class="navbar-actions">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input id="search-input" type="text" class="search-input" placeholder="Search people..." autocomplete="off" />
+        <div class="search-results" id="search-results"></div>
+      </div>
+      <div class="notif-wrapper">
+        <button class="notif-btn" onclick="toggleNotifDropdown()">🔔<span class="notif-badge" id="notif-badge" style="display:none">0</span></button>
+        <div class="notif-dropdown" id="notif-dropdown">
+          <div class="notif-dropdown-header"><h3>Notifications</h3></div>
+          <div id="notif-list"></div>
+        </div>
+      </div>
+      <a href="/messages.html" class="dm-btn">💬</a>
+      <button class="theme-toggle-btn" id="theme-toggle" onclick="handleThemeToggle()">☀️</button>
+      <div id="nav-avatar"></div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="page-layout" style="grid-template-columns:1fr;max-width:700px">
+    <main class="main-content">
+      <!-- Back button -->
+      <div style="margin-bottom:16px">
+        <button class="btn btn-secondary btn-sm" onclick="history.back()">← Back</button>
+      </div>
+
+      <!-- Hashtag Hero -->
+      <div class="hashtag-hero" id="hashtag-hero">
+        <div class="hashtag-hero-tag" id="hashtag-title">Loading...</div>
+        <div class="hashtag-hero-count" id="hashtag-count"></div>
+      </div>
+
+      <!-- Posts -->
+      <div id="posts-container"></div>
+
+      <div style="text-align:center;padding:16px 0">
+        <button class="btn btn-secondary" id="load-more-btn" onclick="loadMore()" style="display:none">Load More</button>
+        <div id="all-loaded" style="display:none;color:var(--text-muted);font-size:.875rem">All posts loaded ✨</div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/js/hashtag.js"></script>
+</body>
+</html>
