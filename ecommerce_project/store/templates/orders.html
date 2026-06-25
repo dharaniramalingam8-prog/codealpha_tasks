@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>My Orders</h1>
+
+{% for order in orders %}
+
+<div class="card p-3 mb-3">
+
+    <h4>{{ order.product.name }}</h4>
+
+    <p>Quantity: {{ order.quantity }}</p>
+
+    <p>Total: ₹{{ order.total_price }}</p>
+    <a href="/invoice/{{ order.id }}/"
+   class="btn btn-success btn-sm">
+   📄 Download Invoice
+    </a>
+
+    <p>{{ order.created_at }}</p>
+
+   <p>
+    Status:
+
+    {% if order.status == 'Pending' %}
+    <span class="badge bg-warning">
+        Pending
+    </span>
+
+    {% elif order.status == 'Packed' %}
+    <span class="badge bg-info">
+        Packed
+    </span>
+
+    {% elif order.status == 'Shipped' %}
+    <span class="badge bg-primary">
+        Shipped
+    </span>
+
+    {% elif order.status == 'Out for Delivery' %}
+    <span class="badge bg-dark">
+        Out for Delivery
+    </span>
+
+    {% elif order.status == 'Delivered' %}
+    <span class="badge bg-success">
+        Delivered
+    </span>
+
+    {% endif %}
+</p>
+
+    <p>
+        Expected Delivery:
+        <strong>15 June 2026</strong>
+    </p>
+
+</div>
+
+{% empty %}
+
+<h4>No Orders Yet</h4>
+
+{% endfor %}
+
+{% endblock %}

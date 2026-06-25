@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Shopping Cart</h1>
+
+{% for item in cart_items %}
+
+<div class="card p-3 mb-3">
+
+    <h4>{{ item.product.name }}</h4>
+
+    <p>Price: ₹{{ item.product.price }}</p>
+
+<div class="d-flex align-items-center gap-2 mb-3">
+    <span><strong>Quantity:</strong></span>
+
+    <a href="/decrease/{{ item.id }}/"
+       class="btn btn-danger btn-sm">-</a>
+
+    <span class="fw-bold">{{ item.quantity }}</span>
+
+    <a href="/increase/{{ item.id }}/"
+       class="btn btn-success btn-sm">+</a>
+</div>
+
+    <a href="/remove-cart/{{ item.id }}/"
+       class="btn btn-outline-danger">
+       Remove
+    </a>
+
+</div>
+
+{% empty %}
+
+<p>Cart is empty</p>
+
+{% endfor %}
+
+<div class="card p-3 mt-4">
+
+    <h3>Price Details</h3>
+
+    <hr>
+
+    <p>
+        Price:
+        <strong>₹{{ total }}</strong>
+    </p>
+
+    <p>
+        Discount:
+        <span class="text-success">
+            - ₹{{ discount }}
+        </span>
+    </p>
+
+    <p>
+        Platform Fee:
+        ₹{{ platform_fee }}
+    </p>
+
+    <hr>
+
+    <h4>
+        Total Amount:
+        ₹{{ final_total }}
+    </h4>
+
+   <p class="text-success fw-bold">
+    🎉 You Saved ₹{{ discount }}
+</p>
+
+<div class="alert alert-success mt-3">
+
+    <h5>🎁 Offers Applied</h5>
+
+    <ul class="mb-0">
+        <li>10% Instant Discount</li>
+        <li>Free Delivery</li>
+        <li>Secure Payment</li>
+    </ul>
+
+</div>
+
+<form method="POST" action="/apply-coupon/">
+    {% csrf_token %}
+
+    <div class="mb-3 mt-3">
+
+        <label>Coupon Code</label>
+
+        <input
+            type="text"
+            name="coupon"
+            class="form-control"
+            placeholder="Enter Coupon">
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-warning">
+        Apply Coupon
+    </button>
+
+</form>
+
+ <div class="mt-3">
+
+    <a href="/address/"
+   class="btn btn-success">
+   Proceed To Checkout
+    </a>
+
+    <a href="/"
+       class="btn btn-primary">
+       Continue Shopping
+    </a>
+
+</div>
+
+{% endblock %}

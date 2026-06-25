@@ -1,0 +1,23 @@
+<h2>Add Product</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Product Name"><br><br>
+
+    <input type="number" name="price" placeholder="Price"><br><br>
+    <input type="number"
+       name="stock"
+       class="form-control"
+       placeholder="Stock"
+       required>
+
+    <input type="text" name="image" placeholder="Image URL"><br><br>
+
+    <input type="text" name="category" placeholder="Category"><br><br>
+
+    <textarea name="description" placeholder="Description"></textarea><br><br>
+
+    <button type="submit">Add Product</button>
+
+</form>

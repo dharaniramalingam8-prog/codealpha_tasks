@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h1>Checkout</h1>
+
+    <form action="/order-success/" method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text"
+                   class="form-control"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label>Address</label>
+            <textarea class="form-control"
+                      required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label>Phone Number</label>
+            <input type="text"
+                   class="form-control"
+                   required>
+        </div>
+
+        <button type="submit"
+                class="btn btn-success">
+            Place Order
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>My Wishlist</h1>
+
+{% for item in items %}
+
+<div class="card p-3 mb-3">
+    <h3>{{ item.product.name }}</h3>
+
+    <p class="fs-5 text-success">
+        ₹{{ item.product.price }}
+    </p>
+
+    <a href="/remove-wishlist/{{ item.id }}/"
+       class="btn btn-danger btn-sm">
+       Remove
+    </a>
+</div>
+
+{% empty %}
+
+<div class="alert alert-info">
+    Your wishlist is empty.
+</div>
+
+{% endfor %}
+
+{% endblock %}

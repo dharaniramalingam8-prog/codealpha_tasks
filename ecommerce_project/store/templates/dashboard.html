@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<h2 class="mb-4">
+    📊 Admin Dashboard
+</h2>
+
+<a href="/add-product/"
+   class="btn btn-success mb-3">
+   ➕ Add Product
+</a>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h4>{{ total_products }}</h4>
+            <p>Total Products</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h4>{{ total_orders }}</h4>
+            <p>Total Orders</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h4>{{ total_users }}</h4>
+            <p>Total Users</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h4>₹{{ revenue }}</h4>
+            <p>Total Revenue</p>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<h3 class="mt-4">Recent Orders</h3>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>User</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Status</th>
+    </tr>
+
+    {% for order in recent_orders %}
+    <tr>
+
+        <td>{{ order.user.username }}</td>
+        <td>{{ order.product.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>₹{{ order.total_price }}</td>
+
+        <td>
+
+            <form method="POST"
+                  action="/update-order-status/{{ order.id }}/">
+
+                {% csrf_token %}
+
+                <select name="status"
+                        class="form-select">
+
+                    <option value="Pending"
+                    {% if order.status == 'Pending' %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="Packed"
+                    {% if order.status == 'Packed' %}selected{% endif %}>
+                        Packed
+                    </option>
+
+                    <option value="Shipped"
+                    {% if order.status == 'Shipped' %}selected{% endif %}>
+                        Shipped
+                    </option>
+
+                    <option value="Out for Delivery"
+                    {% if order.status == 'Out for Delivery' %}selected{% endif %}>
+                        Out for Delivery
+                    </option>
+
+                    <option value="Delivered"
+                    {% if order.status == 'Delivered' %}selected{% endif %}>
+                        Delivered
+                    </option>
+
+                </select>
+
+                <button class="btn btn-primary btn-sm mt-2">
+                    Update
+                </button>
+
+            </form>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="5">
+            No Orders Yet
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<hr>
+
+<h3 class="mt-4">🔥 Top Selling Products</h3>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Product</th>
+        <th>Sold</th>
+    </tr>
+
+    {% for product in top_products %}
+    <tr>
+        <td>{{ product.product__name }}</td>
+        <td>{{ product.total_sold }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">No Sales Yet</td>
+    </tr>
+    {% endfor %}
+
+</table>
+</div>
+
+<hr>
+
+<h3 class="mt-4">📈 Monthly Sales</h3>
+
+<canvas id="salesChart"></canvas>
+
+
+{{ months|json_script:"months-data" }}
+{{ sales|json_script:"sales-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const months = JSON.parse(
+    document.getElementById('months-data').textContent
+);
+
+const sales = JSON.parse(
+    document.getElementById('sales-data').textContent
+);
+
+const ctx = document.getElementById('salesChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [{
+            label: 'Sales ₹',
+            data: sales,
+            borderWidth: 1
+        }]
+    }
+});
+</script>
+
+
+
+{% endblock %}

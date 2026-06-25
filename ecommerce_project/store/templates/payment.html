@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<div class="card p-4 shadow">
+
+<h2>💳 Delivery Payment</h2>
+<div class="alert alert-info">
+
+    <h5>📍 Delivery Address</h5>
+
+    <p>
+        <strong>{{ name }}</strong><br>
+        {{ phone }}<br>
+        {{ address }}<br>
+        {{ pincode }}
+    </p>
+
+</div>
+<form method="POST" action="/process-payment/">
+
+{% csrf_token %}
+
+<input type="text"
+       class="form-control mb-3"
+       placeholder="Card Number">
+
+<input type="text"
+       class="form-control mb-3"
+       placeholder="Card Holder Name">
+
+<input type="text"
+       class="form-control mb-3"
+       placeholder="CVV">
+
+<button class="btn btn-success">
+    Pay Now
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

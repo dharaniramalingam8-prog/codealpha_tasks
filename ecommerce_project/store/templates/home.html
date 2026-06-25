@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+<div class="p-4 rounded-4 text-center text-white mb-5 shadow"
+     style="background: linear-gradient(135deg,#667eea,#764ba2);">
+
+    <h1 class="display-3 fw-bold">
+        Summer Sale 🔥
+    </h1>
+
+    <p class="lead fs-4">
+        Up To 70% OFF On Electronics, Fashion, Beauty & Snacks
+    </p>
+
+    <a href="#products"
+       class="btn btn-warning btn-lg px-4 mt-3">
+       Shop Now
+    </a>
+
+</div>
+<div class="container mb-5">
+
+    {% if category == "Electronics" %}
+    <div class="row text-center">
+
+        <div class="col">
+            <img src="https://cdn-icons-png.flaticon.com/512/0/191.png"
+                 width="80">
+            <p>iPhone</p>
+        </div>
+
+        <div class="col">
+            <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png"
+                 width="80">
+            <p>Samsung</p>
+        </div>
+
+        <div class="col">
+            <img src="https://cdn-icons-png.flaticon.com/512/3659/3659898.png"
+                 width="80">
+            <p>Vivo</p>
+        </div>
+
+        <div class="col">
+            <img src="https://cdn-icons-png.flaticon.com/512/2706/2706950.png"
+                 width="80">
+            <p>Oppo</p>
+        </div>
+
+        <div class="col">
+            <img src="https://cdn-icons-png.flaticon.com/512/3659/3659784.png"
+                 width="80">
+            <p>Realme</p>
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+<h1 id="products"
+    class="text-center fw-bold mb-4">
+    Trending Products
+</h1>
+
+<div class="row">
+    {% for product in products %}
+
+   <div class="col-lg-3 col-md-4 col-6 mb-4">
+
+    <div class="card h-100 shadow-sm border-0">
+
+        <div class="position-relative">
+
+            <img src="{{ product.image }}"
+                 class="card-img-top"
+     style="height:250px; object-fit:cover;">
+
+            <span class="badge bg-danger position-absolute top-0 start-0 m-2">
+                20% OFF
+            </span>
+
+        </div>
+
+        <div class="card-body">
+
+            <h6 class="fw-bold">
+                {{ product.name }}
+            </h6>
+
+            <p class="text-warning mb-1">
+                ⭐⭐⭐⭐☆ (4.5)
+            </p>
+
+            <h5 class="text-success fw-bold">
+                ₹{{ product.price }}
+            </h5>
+
+            <p class="text-muted">
+                Free Delivery
+            </p>
+
+            <a href="/product/{{ product.id }}/"
+               class="btn btn-primary w-100">
+               View Product
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+    {% endfor %}
+</div>
+
+</div>
+
+{% endblock %}
